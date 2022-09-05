@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const Movie = require('../models/movie');
 const {
   NotFoundError,
@@ -29,6 +30,7 @@ module.exports.addMovie = async (req, res, next) => {
       nameRU,
       nameEN,
     } = req.body;
+
     const movie = await Movie.create({
       country,
       director,
@@ -41,7 +43,8 @@ module.exports.addMovie = async (req, res, next) => {
       owner: req.user._id,
       movieId,
       nameRU,
-      nameEN, });
+      nameEN,
+    });
     return res.send(movie);
   } catch (err) {
     if (err.name === 'ValidationError') {
@@ -57,7 +60,7 @@ module.exports.addMovie = async (req, res, next) => {
 
 module.exports.deleteMovie = async (req, res, next) => {
   try {
-    const card = await Movie.findById(req.params.movieId)
+    const movie = await Movie.findById(req.params.movieId)
       .orFail(new NotFoundError('Фильм не найден'));
     if (!movie.owner.equals(req.user._id)) {
       throw new ForbiddenError('Нельзя удалить фильм, добавленный не вами');

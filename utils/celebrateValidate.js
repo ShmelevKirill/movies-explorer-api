@@ -1,5 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
-const { validateUrl } = require ('./validateUrl');
+const { validateUrl } = require('./validateUrl');
 
 const updateUserValidator = celebrate({
   body: Joi.object().keys({

@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const { NODE_ENV, JWT_SECRET } = process.env;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -34,7 +35,7 @@ module.exports.getCurrentUser = async (req, res, next) => {
 
 module.exports.createUser = async (req, res, next) => {
   try {
-    const { name, email, password} = req.body;
+    const { name, email, password } = req.body;
     const hash = await bcrypt.hash(password, 10);
     await User.create({
       name, email, password: hash,

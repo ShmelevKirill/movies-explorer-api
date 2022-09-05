@@ -3,14 +3,15 @@ const { loginValidator, createUserValidator } = require('../utils/celebrateValid
 const { login, createUser } = require('../controllers/users');
 const { NotFoundError } = require('../errors/errors');
 const auth = require('../middlewares/auth');
+
 const router = express.Router();
 
 router.use(express.json());
 
 router.post(
   '/signin',
- loginValidator,
- login
+  loginValidator,
+  login,
 );
 
 router.post(
