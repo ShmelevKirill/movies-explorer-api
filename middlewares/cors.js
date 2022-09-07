@@ -1,6 +1,6 @@
 const allowedCors = [
-  'https://mestoproject.nomoredomains.sbs',
-  'http://mestoproject.nomoredomains.sbs',
+  'https://explorer.movies.nomoredomains.sbs/',
+  'http://explorer.movies.nomoredomains.sbs/',
   'http://localhost:3000',
   'https://localhost:3000',
 ];
