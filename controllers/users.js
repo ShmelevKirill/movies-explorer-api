@@ -6,12 +6,12 @@ const {
   NotFoundError, BadRequestError, ConflictError,
 } = require('../errors/errors');
 
-module.exports.login = async (req, res, next) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user.id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
-      res.send({ message: token });
+      const token = jwt.sign({ _id: user._id }, `${NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key'}`, { expiresIn: '7d' });
+      res.send({ token });
     })
     .catch(next);
 };
@@ -55,36 +55,21 @@ module.exports.createUser = (req, res, next) => {
 
 module.exports.updateUserInfo = (req, res, next) => {
   const { name, email } = req.body;
-  User.findOne({ email })
+  const userId = req.user._id;
+
+  User.findByIdAndUpdate(userId, { name, email }, { new: true, runValidators: true })
     .orFail(() => {
       throw new NotFoundError('Пользователь не найден');
     })
-    .then((user) => {
-      if (user._id.toString() !== req.user._id) {
-        throw new ConflictError('Пользователь с таким email уже существует');
-      }
-      if (user.name === name) {
+    .then((user) => res.send(user))
+    .catch((err) => {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
         throw new BadRequestError('Переданы некорректные данные при создании пользователя');
       }
-      return User.findByIdAndUpdate(req.user._id, {
-        name,
-        email,
-      }, {
-        new: true,
-        runValidators: true,
-      })
-        .then((updateUser) => {
-          res.send({
-            name: updateUser.name,
-            email: updateUser.email,
-          });
-        });
-    })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы неккоректные данные при обновлении пользователя'));
-      } else {
-        next(err);
+      if (err.code === 11000) {
+        throw new ConflictError('Пользователь с таким email уже существует');
       }
-    });
+      next(err);
+    })
+    .catch(next);
 };
