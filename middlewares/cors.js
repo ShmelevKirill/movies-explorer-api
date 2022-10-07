@@ -3,6 +3,8 @@ const allowedCors = [
   'http://explorer.movies.nomoredomains.sbs/',
   'http://localhost:3000',
   'https://localhost:3000',
+  'https://explorer.movies.nomoredomains.icu',
+  'http://explorer.movies.nomoredomains.icu',
 ];
 
 const cors = (req, res, next) => {

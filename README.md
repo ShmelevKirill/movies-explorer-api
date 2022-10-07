@@ -1,6 +1,6 @@
 # Дипломный проект Movies-explorer (бэкенд). Создана в рамках учебы в [Яндекс.Практикум](https://praktikum.yandex.ru/) на курсе ["Веб-разработчик"](https://praktikum.yandex.ru/web/). 
 
-## IP address ➡️ 158.160.10.127
+## IP address ➡️ 158.160.13.28
 
 ## [Link to the server ⬅️](https://explorer.movies.nomoredomains.sbs)
 
