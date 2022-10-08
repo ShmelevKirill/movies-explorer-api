@@ -18,7 +18,7 @@ app.use(helmet());
 
 app.use(limiter);
 
-app.use(cors());
+app.use(cors);
 
 app.use(router);
 
