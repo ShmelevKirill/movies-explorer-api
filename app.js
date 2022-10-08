@@ -19,7 +19,10 @@ app.use(helmet());
 
 app.use(limiter);
 
-app.use(cors);
+app.use(cors({
+  origin: ['https://explorer.movies.nomoredomains.icu', 'http://explorer.movies.nomoredomains.icu'],
+  methods: 'GET,POST,DELETE,OPTIONS,PATCH',
+}));
 
 app.use(router);
 
