@@ -1,49 +1,63 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
 
 const movieSchema = new mongoose.Schema({
   country: {
     type: String,
-    required: [true, 'Поле должно быть заполнено'],
+    required: [true, 'Нужно ввести Страну.'],
   },
   director: {
     type: String,
-    required: [true, 'Поле должно быть заполнено'],
+    required: [true, 'Нужно ввести Режиссера.'],
   },
   duration: {
     type: Number,
-    required: [true, 'Поле должно быть заполнено'],
+    required: [true, 'Нужно ввести Длительность фильма (мин.).'],
   },
   year: {
-    type: Number,
-    required: [true, 'Поле должно быть заполнено'],
+    type: String,
+    required: [true, 'Нужно ввести год выпуска фильма.'],
   },
   description: {
     type: String,
-    required: [true, 'Поле должно быть заполнено'],
+    required: [true, 'Нужно ввести описание фильма.'],
   },
   image: {
     type: String,
-    required: [true, 'Поле должно быть заполнено'],
+    required: [true, 'Нужна ссылка на постер к фильму.'],
     validate: {
-      validator: (v) => validator.isURL(v),
-      message: 'Неправильный формат ссылки',
+      validator(v) {
+        return /https?:\/\/(www\.)?([\w-]+\.)+[\w]+[\w.\-~:/?#[\]@!$&'()*+,;=]+#?/i.test(
+          v,
+        );
+      },
+      message: (props) => `${props.value} не похоже на ссылку!`,
     },
   },
   trailerLink: {
     type: String,
-    required: [true, 'Поле должно быть заполнено'],
+    required: [true, 'Нужна ссылка на трейлер фильма.'],
     validate: {
-      validator: (v) => validator.isURL(v),
-      message: 'Неправильный формат ссылки',
+      validator(v) {
+        return /https?:\/\/(www\.)?([\w-]+\.)+[\w]+[\w.\-~:/?#[\]@!$&'()*+,;=]+#?/i.test(
+          v,
+        );
+      },
+      message: (props) => `${props.value} не похоже на ссылку!`,
     },
   },
   thumbnail: {
     type: String,
-    required: [true, 'Поле должно быть заполнено'],
+    required: [
+      true,
+      'Нужна ссылка на миниатюрное изображение постера к фильму.',
+    ],
     validate: {
-      validator: (v) => validator.isURL(v),
-      message: 'Неправильный формат ссылки',
+      validator(v) {
+        return /https?:\/\/(www\.)?([\w-]+\.)+[\w]+[\w.\-~:/?#[\]@!$&'()*+,;=]+#?/i.test(
+          v,
+        );
+      },
+      message: (props) => `${props.value} не похоже на ссылку!`,
     },
   },
   owner: {
@@ -53,16 +67,16 @@ const movieSchema = new mongoose.Schema({
   },
   movieId: {
     type: Number,
-    required: [true, 'Поле должно быть заполнено'],
+    required: true,
   },
   nameRU: {
     type: String,
-    required: [true, 'Поле должно быть заполнено'],
+    required: [true, 'Нужно ввести название фильма на русском языке.'],
   },
   nameEN: {
     type: String,
-    name: [true, 'Поле должно быть заполнено'],
+    required: [true, 'Нужно ввести название фильма на английском языке.'],
   },
-}, { versionKey: false });
+});
 
 module.exports = mongoose.model('movie', movieSchema);
