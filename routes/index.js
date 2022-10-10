@@ -1,21 +1,27 @@
-const router = require('express').Router();
-const { loginJoi, usersJoi } = require('../middlewares/validation');
-const NotFoundError = require('../errors/not-found-err');
+const express = require('express');
 
+const { movies } = require('./movies');
+const { users } = require('./users');
+const { NotFoundError } = require('../errors');
 const { auth } = require('../middlewares/auth');
-const { login, signout, createUser } = require('../controllers/users');
+const { createUser, login } = require('../controllers/users');
+const { createUserValidator, loginValidator } = require('../utils/validators');
+const { ERROR_MESSAGES } = require('../utils/constants');
 
-router.post('/signin', loginJoi, login);
-router.post('/signup', usersJoi, createUser);
+const routes = express.Router();
 
-router.use(auth);
-router.use('/users', require('./users'));
-router.use('/movies', require('./movies'));
+routes.all('*', express.json());
 
-router.use('/signout', signout);
+routes.post('/signup', createUserValidator, createUser);
+routes.post('/signin', loginValidator, login);
 
-router.use(() => {
-  throw new NotFoundError('Нет такого покемона');
+routes.all('*', auth);
+
+routes.use('/users', users);
+routes.use('/movies', movies);
+
+routes.all('*', (req, res, next) => {
+  next(new NotFoundError(ERROR_MESSAGES.PAGE_NOT_FOUND));
 });
 
-module.exports = router;
+module.exports = { routes };

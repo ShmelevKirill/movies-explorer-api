@@ -1,30 +1,33 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    minlength: [2, 'Слишком короткое имя. Нужно минимум 2 символа.'],
-    maxlength: [30, 'Слишком длинное имя. Должно быть не длиннее 30 символов.'],
-    default: 'Елена',
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: [true, 'Email занят'],
-    validate: {
-      validator(v) {
-        return /.+@.+\..+/i.test(v);
+const userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      validate: {
+        validator: validator.isEmail,
       },
-      message: (props) => `${props.value} не похоже на email!`,
+    },
+    password: {
+      type: String,
+      required: true,
+      select: false,
+    },
+    name: {
+      type: String,
+      minlength: 2,
+      maxlength: 30,
+      required: true,
     },
   },
-  password: {
-    type: String,
-    select: false,
-    required: true,
-    minlength: 8,
+  {
+    versionKey: false,
   },
-});
+);
 
-module.exports = mongoose.model('user', userSchema);
+const User = mongoose.model('user', userSchema);
+
+module.exports = { User };

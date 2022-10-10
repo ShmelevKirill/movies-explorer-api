@@ -1,15 +1,15 @@
-const router = require('express').Router();
-const { moviesJoi, movieIdJoi } = require('../middlewares/validation');
+const express = require('express');
 
+const { getMovies, saveMovie, deleteMovie } = require('../controllers/movies');
 const {
-  getSavedMovies, createMovie, delMovie,
-} = require('../controllers/movies');
+  saveMovieValidator,
+  deleteMovieValidator,
+} = require('../utils/validators');
 
-router.get('/', getSavedMovies); // возвращает все сохранённые текущим  пользователем фильмы
-router.delete('/:_id', movieIdJoi, delMovie); // удаляет сохранённый фильм по id
-router.post('/', moviesJoi, createMovie);
-// создаёт фильм с переданными в теле
-// country, director, duration, year, description,
-// image, trailer, nameRU, nameEN, thumbnail, movieId
+const movies = express.Router();
 
-module.exports = router;
+movies.get('/', getMovies);
+movies.post('/', saveMovieValidator, saveMovie);
+movies.delete('/:id', deleteMovieValidator, deleteMovie);
+
+module.exports = { movies };
