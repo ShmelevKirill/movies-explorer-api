@@ -24,7 +24,7 @@ const movieSchema = new mongoose.Schema(
       required: true,
     },
     image: {
-      type: String,
+      type: Object,
       required: true,
       validate: {
         validator: validator.isURL,
