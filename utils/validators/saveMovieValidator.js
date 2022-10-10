@@ -10,9 +10,9 @@ const saveMovieValidator = celebrate({
     description: Joi.string().required(),
     image: Joi.object().required(),
     trailerLink: Joi.string().required().custom(validateUrl),
+    id: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
-    id: Joi.number().required(),
   }),
 });
 

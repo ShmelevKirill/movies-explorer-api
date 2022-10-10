@@ -37,21 +37,21 @@ const movieSchema = new mongoose.Schema(
         validator: validator.isURL,
       },
     },
-    nameRU: {
-      type: String,
-      required: true,
-    },
-    nameEN: {
-      type: String,
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
       required: true,
     },
     id: {
       type: Number,
       required: true,
     },
-    owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'user',
+    nameRU: {
+      type: String,
+      required: true,
+    },
+    nameEN: {
+      type: String,
       required: true,
     },
   },
