@@ -1,67 +1,56 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
+const { isURL } = require('validator');
 
-const movieSchema = new mongoose.Schema(
-  {
-    country: {
-      type: String,
-      required: true,
-    },
-    director: {
-      type: String,
-      required: true,
-    },
-    duration: {
-      type: Number,
-      required: true,
-    },
-    year: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    image: {
-      type: Object,
-      required: true,
-      validate: {
-        validator: validator.isURL,
-      },
-    },
-    trailerLink: {
-      type: String,
-      required: true,
-      validate: {
-        validator: validator.isURL,
-      },
-    },
-    owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'user',
-      required: true,
-    },
-    id: {
-      type: Number,
-      required: true,
-    },
-    nameRU: {
-      type: String,
-      required: true,
-    },
-    nameEN: {
-      type: String,
-      required: true,
-    },
+const movieSchema = new mongoose.Schema({
+  country: {
+    type: String,
+    required: true,
   },
-  {
-    versionKey: false,
+  director: {
+    type: String,
+    required: true,
   },
-);
+  duration: {
+    type: Number,
+    required: true,
+  },
+  year: {
+    type: String,
+    required: true,
+    length: 4,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: Object,
+    required: true,
+  },
+  trailerLink: {
+    type: String,
+    required: true,
+    validate: isURL,
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+    required: true,
+  },
+  id: {
+    type: Number,
+    required: true,
+  },
+  nameRU: {
+    type: String,
+    required: true,
+  },
+  nameEN: {
+    type: String,
+    required: true,
+  },
+}, {
+  versionKey: false,
+});
 
-movieSchema.index({ owner: 1, movieId: 1 }, { unique: true });
-
-const Movie = mongoose.model('movie', movieSchema);
-
-module.exports = { Movie };
+module.exports = mongoose.model('movie', movieSchema);
