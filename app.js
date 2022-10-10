@@ -26,6 +26,7 @@ const options = {
     'http://explorer.movies.nomoredomains.icu',
   ],
   credentials: true,
+  optionSuccessStatus: 200,
 };
 
 const limiter = rateLimit({
