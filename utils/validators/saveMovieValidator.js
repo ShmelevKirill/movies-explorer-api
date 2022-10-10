@@ -10,7 +10,6 @@ const saveMovieValidator = celebrate({
     description: Joi.string().required(),
     image: Joi.object().required(),
     trailerLink: Joi.string().required().custom(validateUrl),
-    thumbnail: Joi.string().required().custom(validateUrl),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
     movieId: Joi.number().required(),

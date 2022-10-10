@@ -37,13 +37,6 @@ const movieSchema = new mongoose.Schema(
         validator: validator.isURL,
       },
     },
-    thumbnail: {
-      type: String,
-      required: true,
-      validate: {
-        validator: validator.isURL,
-      },
-    },
     nameRU: {
       type: String,
       required: true,
