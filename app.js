@@ -17,8 +17,6 @@ const { MONGO_URL } = require('./config');
 
 const options = {
   origin: [
-    'https://praktikum.tk',
-    'http://praktikum.tk',
     'http://localhost:3000',
     'https://localhost:3000',
     'http://localhost:3001',
