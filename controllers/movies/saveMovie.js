@@ -15,9 +15,10 @@ async function saveMovie(req, res, next) {
       description,
       image,
       trailerLink,
+      thumbnail,
       nameRU,
       nameEN,
-      id,
+      movieId,
     } = req.body;
 
     const ownerId = req.user._id;
@@ -30,9 +31,10 @@ async function saveMovie(req, res, next) {
       description,
       image,
       trailerLink,
+      thumbnail,
       nameRU,
       nameEN,
-      id,
+      movieId,
       owner: ownerId,
     });
 
