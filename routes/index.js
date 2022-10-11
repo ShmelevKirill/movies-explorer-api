@@ -1,27 +1,20 @@
-const express = require('express');
+const router = require('express').Router();
+const NotFoundError = require('../errors/not-found-err');
+const { login, createUser } = require('../controllers/users');
+const auth = require('../middlewares/auth');
+const { validateLogin, validateRegistration } = require('../middlewares/validation');
+const { errorNotFoundText } = require('../configs/constants');
 
-const { movies } = require('./movies');
-const { users } = require('./users');
-const { NotFoundError } = require('../errors');
-const { auth } = require('../middlewares/auth');
-const { createUser, login } = require('../controllers/users');
-const { createUserValidator, loginValidator } = require('../utils/validators');
-const { ERROR_MESSAGES } = require('../utils/constants');
+router.post('/signin', validateLogin, login);
+router.post('/signup', validateRegistration, createUser);
 
-const routes = express.Router();
+router.use(auth);
 
-routes.all('*', express.json());
+router.use('/users', require('./users'));
+router.use('/movies', require('./movies'));
 
-routes.post('/signup', createUserValidator, createUser);
-routes.post('/signin', loginValidator, login);
-
-routes.all('*', auth);
-
-routes.use('/users', users);
-routes.use('/movies', movies);
-
-routes.all('*', (req, res, next) => {
-  next(new NotFoundError(ERROR_MESSAGES.PAGE_NOT_FOUND));
+router.use(() => {
+  throw new NotFoundError(errorNotFoundText);
 });
 
-module.exports = { routes };
+module.exports = router;

@@ -1,15 +1,19 @@
-const { STATUS_CODES, ERROR_MESSAGES } = require('../utils/constants');
+const { errorServerText } = require('../configs/constants');
 
-// eslint-disable-next-line no-unused-vars
-function errorHandler(err, req, res, next) {
-  const { statusCode = STATUS_CODES.INTERNAL_SERVER_ERROR } = err;
-  let { message } = err;
+const errorsHandler = (err, req, res, next) => {
+  const { statusCode = 500, message } = err;
 
-  if (statusCode === STATUS_CODES.INTERNAL_SERVER_ERROR) {
-    message = ERROR_MESSAGES.UNKNOWN_ERROR;
-  }
+  res
+    .status(statusCode)
+    .send({
+      message: statusCode === 500
+        ? errorServerText
+        : message,
+    });
 
-  res.status(statusCode).send({ message });
-}
+  next();
+};
 
-module.exports = { errorHandler };
+module.exports = {
+  errorsHandler,
+};

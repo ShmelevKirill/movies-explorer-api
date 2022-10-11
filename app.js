@@ -1,43 +1,39 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
-const { errors } = require('celebrate');
 const helmet = require('helmet');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const { errors } = require('celebrate');
 const cors = require('cors');
-
-const { limiter } = require('./middlewares/limiter');
+const routes = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { routes } = require('./routes');
-const { errorHandler } = require('./middlewares/errorHandler');
-const configDefault = require('./utils/configDefault');
+const { errorsHandler } = require('./middlewares/errorHandler');
+const { limiter } = require('./middlewares/rateLimiter');
+const { DATABASE } = require('./configs');
 
-const {
-  PORT = configDefault.PORT,
-  DATABASE_URL = configDefault.DATABASE_URL,
-} = process.env;
-
+const { PORT = 3000, MONGO_URL = DATABASE } = process.env;
 const app = express();
 
-mongoose
-  .connect(DATABASE_URL)
-  .then(() => {
-    console.log(`Connected to database on ${DATABASE_URL}`);
-  })
-  .catch((err) => {
-    console.log('Error on database connection');
-    console.error(err);
-  });
+app.use(helmet());
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+mongoose.connect(MONGO_URL);
+
+app.use(requestLogger);
+
+app.use(cors());
 
 app.use(limiter);
-app.use(cors());
-app.use(requestLogger);
-app.use(helmet());
+
 app.use(routes);
 
 app.use(errorLogger);
+
 app.use(errors());
-app.use(errorHandler);
+
+app.use(errorsHandler);
 
 app.listen(PORT, () => {
-  console.log(`App started on port ${PORT}...`);
 });

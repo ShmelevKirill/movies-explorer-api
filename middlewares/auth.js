@@ -1,33 +1,29 @@
 const jwt = require('jsonwebtoken');
 
-const { UnauthorizedError } = require('../errors');
-const { ERROR_MESSAGES } = require('../utils/constants');
-const configDefault = require('../utils/configDefault');
+const { NODE_ENV, JWT_SECRET } = process.env;
+const UnauthorizedError = require('../errors/unauthorized-err')
+const { JWT_SECRET_DEV } = require('../configs/index');
+const { errorAuthorizationText } = require('../configs/constants');
 
-const { JWT_SECRET = configDefault.JWT_SECRET } = process.env;
+const auth = (req, res, next) => {
+  const { authorization } = req.headers;
 
-function auth(req, res, next) {
-  try {
-    const { authorization } = req.headers;
-
-    if (!authorization || !authorization.startsWith('Bearer ')) {
-      throw new UnauthorizedError(ERROR_MESSAGES.UNAUTHORIZED);
-    }
-
-    const token = authorization.replace('Bearer ', '');
-    let payload;
-
-    try {
-      payload = jwt.verify(token, JWT_SECRET);
-    } catch (err) {
-      throw new UnauthorizedError(ERROR_MESSAGES.UNAUTHORIZED);
-    }
-
-    req.user = payload;
-    next();
-  } catch (err) {
-    next(err);
+  if (!authorization || !authorization.startsWith('Bearer ')) {
+    throw new UnauthorizedError(errorAuthorizationText);
   }
-}
 
-module.exports = { auth };
+  const token = authorization.replace('Bearer ', '');
+  let payload;
+
+  try {
+    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : JWT_SECRET_DEV);
+  } catch (err) {
+    throw new UnauthorizedError(errorAuthorizationText);
+  }
+
+  req.user = payload;
+
+  next();
+};
+
+module.exports = auth;
