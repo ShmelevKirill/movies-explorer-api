@@ -13,7 +13,7 @@ const saveMovieValidator = celebrate({
     id: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
-  }),
+  }).unknown(),
 });
 
 module.exports = { saveMovieValidator };
