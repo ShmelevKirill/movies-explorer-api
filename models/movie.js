@@ -55,7 +55,7 @@ const movieSchema = new mongoose.Schema({
   versionKey: false,
 });
 
-movieSchema.index({ owner: 1, movieId: 1 }, { unique: true });
+movieSchema.index({ owner: 1, id: 1 }, { unique: true });
 
 const Movie = mongoose.model('movie', movieSchema);
 
