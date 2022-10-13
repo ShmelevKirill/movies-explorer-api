@@ -39,10 +39,10 @@ const validateMovieInfo = celebrate({
     year: Joi.string().required().length(4),
     description: Joi.string().required(),
     image: Joi.object().required(),
-    trailerLink: Joi.string().custom(validateUrl),
+    trailerLink: Joi.string().required().custom(validateUrl),
     id: Joi.number().required(),
     nameRU: Joi.string().required(),
-    nameEN: Joi.string(),
+    nameEN: Joi.string().required(),
   }).unknown(),
 });
 
