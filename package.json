@@ -16,7 +16,7 @@
     "express-js",
     "rest-api"
   ],
-  "author": "novvember",
+  "author": "Shmelev Kirill",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/shmelevkirill/movies-explorer-api/issues"
