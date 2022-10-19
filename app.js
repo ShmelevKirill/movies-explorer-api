@@ -6,7 +6,8 @@ const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const cors = require('cors');
 const routes = require('./routes/index');
-const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { requestLogger } = require('./middlewares/logger');
+// const { errorLogger } = require('./middlewares/logger');
 const { errorsHandler } = require('./middlewares/errorHandler');
 const { limiter } = require('./middlewares/rateLimiter');
 const { DATABASE } = require('./configs');
@@ -29,7 +30,7 @@ app.use(limiter);
 
 app.use(routes);
 
-app.use(errorLogger);
+// app.use(errorLogger);
 
 app.use(errors());
 
